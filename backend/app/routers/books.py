@@ -61,9 +61,6 @@ async def list_books(
 ):
     """List all books with optional filtering and pagination."""
     result = await get_all_books(page=page, page_size=page_size, genre=genre, search=search)
-    print("-----------------------------------------------------")
-    print(result)
-    print("-----------------------------------------------------")
     return result
 
 

@@ -1,10 +1,9 @@
 # Book Intelligence README Enhancement Task
 ## Steps from Approved Plan
 
-### [x] 1. Create TODO.md ✅
-### [x] 2. Create comprehensive README.md ✅
-### [x] 3. User verification ✅
-### [x] 4. Follow-up: No further actions (user adds screenshots) ✅
-
-Updated after each completion.
+### [x] 1. Create TODO.md with steps ✅
+### [x] 2. Edit README.md: Update badges and add TOC/Tech Stack ✅
+### [x] 3. Edit README.md: Replace screenshots section with actual images ✅
+### [x] 4. Polish other sections (setup, etc.) ✅
+### [ ] 5. User verification and completion
 

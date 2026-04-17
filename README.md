@@ -1,13 +1,34 @@
 # 🚀 Book Intelligence Platform
 
-[![GitHub stars](https://img.shields.io/github/stars/yourusername/book-intelligence?style=social)](https://github.com/yourusername/book-intelligence)
-[![License](https://img.shields.io/github/license/yourusername/book-intelligence)](LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/SHUBHAM-PANDEY/book-intelligence?style=social)](https://github.com/SHUBHAM-PANDEY/book-intelligence)
+[![License](https://img.shields.io/github/license/SHUBHAM-PANDEY/book-intelligence)](LICENSE)
 [![Backend](https://img.shields.io/badge/FastAPI-1.0.0-green)](https://fastapi.tiangolo.com/)
 [![Frontend](https://img.shields.io/badge/React-18.2-blue)](https://reactjs.org/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-7.0-brightgreen)](https://mongodb.com/)
+[![ChromaDB](https://img.shields.io/badge/ChromaDB-0.5-orange)](https://docs.trychroma.com/)
+[![Tailwind](https://img.shields.io/badge/Tailwind-3.4-blueviolet)](https://tailwindcss.com/)
 
 **AI-Powered Book Discovery & Intelligence Platform**
 
 Scrape books from the web, store embeddings, ask intelligent questions with RAG (Retrieval-Augmented Generation), get recommendations, and explore your library with LLM insights!
+
+## 📋 Table of Contents
+- [✨ Features](#-features)
+- [📸 Screenshots](#-screenshots)
+- [🚀 Quick Start](#-quick-start)
+- [🛠️ Detailed Setup](#️-detailed-setup)
+- [📚 API Documentation](#-api-documentation)
+- [💬 Sample Questions](#-sample-questions--answers)
+- [🏗️ Project Structure](#️-project-structure)
+- [🔍 Troubleshooting](#-troubleshooting)
+- [🚀 Next Steps](#-next-steps--contributing)
+- [📄 License](#-license)
+
+## 🛠️ Tech Stack
+- **Backend**: FastAPI, MongoDB, ChromaDB (vector DB), Selenium/BeautifulSoup (scraping)
+- **Frontend**: React 18, Vite, Tailwind CSS
+- **AI/ML**: Gemini 1.5 / Groq, RAG pipeline
+- **Other**: Pydantic, Motor (async Mongo), CORS
 
 ## ✨ Features
 
@@ -21,25 +42,20 @@ Scrape books from the web, store embeddings, ask intelligent questions with RAG 
 
 ## 📸 Screenshots
 
-### Dashboard - Book Library Overview
-```
-[PLACEHOLDER: Screenshot of Dashboard with book cards, search, genres, stats]
-```
+<div align="center">
 
-### Scrape Modal - Add New Books
-```
-[PLACEHOLDER: Screenshot of ScrapeModal with genre selector and progress]
-```
+### 🏠 Dashboard - Book Library Overview
+![Dashboard](assets/dashboard.png)
 
-### Q&A Interface - Intelligent Book Chat
-```
-[PLACEHOLDER: Screenshot of QnA page with conversation, sources, and sample questions]
-```
+### 📖 Book Details - Insights & Recommendations
+![Book Details](assets/details.png)
 
-### Book Detail - Full Insights & Recommendations
-```
-[PLACEHOLDER: Screenshot of BookDetail with AI insights, similar books]
-```
+### 💬 Q&A Interface - Ask Your Library
+![QnA](assets/qna.png)
+
+</div>
+
+*Pro tip: Screenshots shown in desktop view. Responsive on mobile!*
 
 ## 🚀 Quick Start
 
