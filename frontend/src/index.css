@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-parchment font-body text-ink-900 antialiased;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  }
+
+  ::selection {
+    @apply bg-ink-200 text-ink-900;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center gap-2 px-5 py-2.5 bg-ink-800 text-parchment font-body font-medium text-sm rounded-sm
+           hover:bg-ink-700 active:bg-ink-900 transition-colors duration-150 cursor-pointer;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 px-5 py-2.5 border border-ink-300 text-ink-700 font-body font-medium text-sm rounded-sm
+           hover:bg-ink-50 active:bg-ink-100 transition-colors duration-150 cursor-pointer;
+  }
+
+  .card {
+    @apply bg-white/70 backdrop-blur-sm border border-ink-100 rounded-sm shadow-sm;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-2.5 bg-white border border-ink-200 rounded-sm text-ink-900 font-body text-sm
+           placeholder:text-ink-400 focus:outline-none focus:ring-1 focus:ring-ink-400 focus:border-ink-400
+           transition-colors duration-150;
+  }
+
+  .tag {
+    @apply inline-flex items-center px-2.5 py-0.5 text-xs font-mono bg-ink-100 text-ink-700 rounded-full;
+  }
+
+  .skeleton {
+    @apply bg-gradient-to-r from-ink-100 via-ink-50 to-ink-100 bg-[length:200%_100%] animate-shimmer rounded;
+  }
+
+  .rating-star {
+    @apply text-amber-500;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f5ede0;
+}
+::-webkit-scrollbar-thumb {
+  background: #c4ac7c;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #967840;
+}
+
+/* Prose styles for AI answers */
+.prose-ink p {
+  margin-bottom: 0.75rem;
+  line-height: 1.7;
+}
+.prose-ink strong {
+  color: #2a2015;
+  font-weight: 600;
+}
