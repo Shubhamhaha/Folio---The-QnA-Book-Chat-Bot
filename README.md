@@ -21,6 +21,7 @@ Scrape books from the web, store embeddings, ask intelligent questions with RAG 
 - [💬 Sample Questions](#-sample-questions--answers)
 - [🏗️ Project Structure](#️-project-structure)
 - [🔍 Troubleshooting](#-troubleshooting)
+- [📐 Architecture Overview](ARCHITECTURE.md)
 - [🚀 Next Steps](#-next-steps--contributing)
 - [📄 License](#-license)
 

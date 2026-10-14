@@ -19,3 +19,26 @@ dist/
 # OS
 .DS_Store
 *.swp
+
+# Python virtual environments
+.venv/
+backend/venv/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+backend/.env
+frontend/.env
+
+# Local vector database
+backend/chroma_db/
+chroma_db/
+
+# Frontend dependencies and build output
+frontend/node_modules/
+frontend/dist/
+
+# Python cache
+__pycache__/
+*.py[cod]
