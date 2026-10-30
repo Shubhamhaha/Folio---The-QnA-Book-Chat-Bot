@@ -12,6 +12,7 @@ Endpoints:
 import logging
 from typing import Optional
 from fastapi import APIRouter, HTTPException, Query, BackgroundTasks
+from starlette.concurrency import run_in_threadpool
 
 from app.models.schemas import (
     BookListResponse,
@@ -35,12 +36,12 @@ from app.utils.database import (
 )
 from app.services.scraper import scrape_books
 from app.services.llm_service import (
-    generate_book_insights,
     answer_question_with_context,
     get_recommendation_reason,
     get_llm_model_name,
 )
 from app.services.rag_service import (
+    build_book_text,
     store_book_embeddings,
     search_similar_chunks,
     find_similar_books,
@@ -177,15 +178,25 @@ async def scrape_and_store(request: ScrapeRequest, background_tasks: BackgroundT
     Trigger book scraping pipeline.
     1. Scrape books from the web
     2. Store new books in MongoDB
-    3. Generate AI insights
-    4. Store embeddings in ChromaDB
+    3. Store embeddings in ChromaDB without waiting on an LLM call per book
     """
     logger.info(f"Scrape triggered: max_pages={request.max_pages}")
 
-    scraped_books = scrape_books(
-        max_pages=request.max_pages,
-        genre_filter=request.genre_filter,
+    scraped_books = await run_in_threadpool(
+        scrape_books,
+        request.max_pages,
+        request.genre_filter,
+        request.url,
     )
+
+    if not scraped_books:
+        raise HTTPException(
+            status_code=502,
+            detail=(
+                "The book source returned no books. Check the source URL and "
+                "genre filter, then try again."
+            ),
+        )
 
     added = 0
     for raw_book in scraped_books:
@@ -194,19 +205,12 @@ async def scrape_and_store(request: ScrapeRequest, background_tasks: BackgroundT
         if existing:
             continue
 
-        # Generate AI insights
-        try:
-            insights = generate_book_insights(raw_book)
-            raw_book["ai_insights"] = insights
-        except Exception as e:
-            logger.warning(f"Insight generation failed for {raw_book.get('title')}: {e}")
-            raw_book["ai_insights"] = {}
-
         # Save to MongoDB
         created = await create_book(raw_book)
         added += 1
 
-        # Store embeddings in background
+        # Index without making an LLM request per book; imports should not hit
+        # provider rate limits or wait on dozens of sequential generations.
         background_tasks.add_task(_store_embeddings_task, created)
 
     return ScrapeResponse(
@@ -217,13 +221,13 @@ async def scrape_and_store(request: ScrapeRequest, background_tasks: BackgroundT
 
 
 async def _store_embeddings_task(book: dict):
-    """Background task: store book embeddings in ChromaDB."""
+    """Index a newly scraped book without blocking the scrape response."""
     try:
-        success = store_book_embeddings(book)
+        success = await run_in_threadpool(store_book_embeddings, book)
         if success:
             await update_book(book["id"], {"embedding_stored": True})
     except Exception as e:
-        logger.error(f"Background embedding task failed for {book.get('id')}: {e}")
+        logger.exception("Background processing failed for book %s: %s", book.get("id"), e)
 
 
 # ── POST /api/books/ask ───────────────────────────────────────────────────────
@@ -238,6 +242,48 @@ async def ask_question(request: QuestionRequest):
     4. Return answer with source citations
     """
     logger.info(f"Q&A request: {request.question[:80]}")
+
+    # Answer numeric rating comparisons from catalog data, not semantic search.
+    rating_query = request.question.lower()
+    rating_terms = (
+        "rating", "rated", "positive reviews", "most positive",
+        "best-rated", "highest-rated", "highest rated",
+    )
+    if any(term in rating_query for term in rating_terms):
+        all_books = await get_all_books(page=1, page_size=1000)
+        ranked = sorted(
+            (book for book in all_books["books"] if book.get("rating") is not None),
+            key=lambda book: float(book["rating"]),
+            reverse=True,
+        )[:5]
+        if ranked:
+            answer = (
+                "The catalog stores star ratings, not written review sentiment. "
+                "By catalog rating, the highest-rated books are:\n\n"
+                + "\n".join(
+                    f"- **{book['title']}** — {book['rating']}/5"
+                    for book in ranked
+                )
+            )
+            sources = [
+                SourceCitation(
+                    book_id=book["id"],
+                    title=book["title"],
+                    author=book.get("author") or "Unknown",
+                    relevance_score=min(float(book["rating"]) / 5, 1.0),
+                    excerpt=(
+                        f"Catalog rating: {book['rating']}/5. "
+                        f"Reviews recorded: {book.get('reviews_count') or 0}."
+                    ),
+                )
+                for book in ranked
+            ]
+            return QuestionResponse(
+                question=request.question,
+                answer=answer,
+                sources=sources,
+                model_used="Catalog ratings",
+            )
 
     # Retrieve similar chunks
     chunks = search_similar_chunks(
@@ -258,6 +304,17 @@ async def ask_question(request: QuestionRequest):
             sources=[],
             model_used=get_llm_model_name(),
         )
+
+    # Rebuild retrieved context from current catalog fields. This avoids stale,
+    # previously generated summaries contaminating answers.
+    for chunk in chunks:
+        book = await get_book_by_id(chunk["book_id"])
+        if book:
+            description = str(book.get("description") or "").strip()
+            chunk["text"] = build_book_text({**book, "ai_insights": None})
+            chunk["description_available"] = len(description) >= 80
+            chunk["title"] = book.get("title") or chunk.get("title")
+            chunk["author"] = book.get("author") or chunk.get("author")
 
     # Generate answer via LLM
     answer = answer_question_with_context(request.question, chunks)

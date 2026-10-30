@@ -3,11 +3,14 @@ MongoDB connection and CRUD helpers using Motor (async).
 """
 
 import motor.motor_asyncio
+import logging
 from bson import ObjectId
 from typing import Optional, List, Dict, Any
 from datetime import datetime
 
 from app.config import settings
+
+logger = logging.getLogger(__name__)
 
 # Global client
 client: Optional[motor.motor_asyncio.AsyncIOMotorClient] = None
@@ -25,7 +28,7 @@ async def connect_db():
     await db.books.create_index("author")
     await db.books.create_index("genre")
     await db.books.create_index("created_at")
-    print(f"✅ Connected to MongoDB: {settings.DATABASE_NAME}")
+    logger.info("Connected to MongoDB: %s", settings.DATABASE_NAME)
 
 
 async def disconnect_db():

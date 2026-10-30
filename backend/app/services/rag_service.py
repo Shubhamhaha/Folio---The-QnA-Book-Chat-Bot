@@ -94,6 +94,10 @@ def build_book_text(book: Dict) -> str:
         parts.append(f"Author: {book['author']}")
     if book.get("genre"):
         parts.append(f"Genre: {book['genre']}")
+    if book.get("rating") is not None:
+        parts.append(f"Catalog rating: {book['rating']} / 5")
+    if book.get("reviews_count") is not None:
+        parts.append(f"Review count: {book['reviews_count']}")
     if book.get("description"):
         parts.append(f"Description: {book['description']}")
 

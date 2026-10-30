@@ -1,7 +1,7 @@
 # 🚀 Book Intelligence Platform
 
-[![GitHub stars](https://img.shields.io/github/stars/SHUBHAM-PANDEY/book-intelligence?style=social)](https://github.com/SHUBHAM-PANDEY/book-intelligence)
-[![License](https://img.shields.io/github/license/SHUBHAM-PANDEY/book-intelligence)](LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/Shubhamhaha/Folio---The-QnA-Book-Chat-Bot?style=social)](https://github.com/Shubhamhaha/Folio---The-QnA-Book-Chat-Bot)
+[![License](https://img.shields.io/github/license/Shubhamhaha/Folio---The-QnA-Book-Chat-Bot)](LICENSE)
 [![Backend](https://img.shields.io/badge/FastAPI-1.0.0-green)](https://fastapi.tiangolo.com/)
 [![Frontend](https://img.shields.io/badge/React-18.2-blue)](https://reactjs.org/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-7.0-brightgreen)](https://mongodb.com/)
@@ -83,23 +83,23 @@ CHROMA_DB_PATH=./chroma_db
 ```
 
 ```bash
-uvicorn main:app --reload --port 8000
+uvicorn main:app --reload --port 8002
 ```
 
 ### 2. Setup Frontend
 ```bash
 cd frontend
 npm install
-echo "VITE_API_URL=http://localhost:8000" > .env
-npm run dev  # http://localhost:5173
+echo "VITE_API_URL=http://127.0.0.1:8002" > .env
+npm run dev  # http://127.0.0.1:5174
 ```
 
 ### 3. First Run
-1. Open http://localhost:5173
+1. Open http://127.0.0.1:5174
 2. Click **Scrape Books** → Select genre → Start!
 3. Once books are scraped, try **Ask the Library** Q&A
 
-**Health Check:** `GET http://localhost:8000/health`
+**Health Check:** `GET http://127.0.0.1:8002/health`
 
 ## 🛠️ Detailed Setup
 
@@ -118,14 +118,14 @@ GEMINI_API_KEY=...  # https://aistudio.google.com/app/apikey
 GROQ_API_KEY=...    # https://console.groq.com/keys
 LLM_PROVIDER=gemini # gemini or groq
 CHROMA_DB_PATH=./chroma_db
-ALLOWED_ORIGINS=http://localhost:5173
+ALLOWED_ORIGINS=http://127.0.0.1:5174,http://localhost:5174
 ```
 
 ## 📚 API Documentation
 
-**Base URL:** `http://localhost:8000`
+**Base URL:** `http://127.0.0.1:8002`
 
-Auto-generated docs: http://localhost:8000/docs
+Auto-generated docs: http://127.0.0.1:8002/docs
 
 ### Books Endpoints
 | Method | Endpoint | Description |
@@ -142,14 +142,14 @@ Auto-generated docs: http://localhost:8000/docs
 
 **Scrape Books:**
 ```bash
-curl -X POST http://localhost:8000/api/books/scrape \
+curl -X POST http://127.0.0.1:8002/api/books/scrape \
   -H "Content-Type: application/json" \
   -d '{"max_pages": 3, "genre_filter": "sci-fi"}'
 ```
 
 **Ask Question:**
 ```bash
-curl -X POST http://localhost:8000/api/books/ask \
+curl -X POST http://127.0.0.1:8002/api/books/ask \
   -H "Content-Type: application/json" \
   -d '{"question": "Which books have adventure themes?"}'
 ```
@@ -223,7 +223,7 @@ book-intelligence/
 | `No embeddings` | Wait for scrape background tasks |
 | `CORS error` | Add origin to `ALLOWED_ORIGINS` |
 | `LLM quota exceeded` | Switch `LLM_PROVIDER` or get new API key |
-| `Frontend can't find API` | Set `VITE_API_URL=http://localhost:8000` |
+| `Frontend can't find API` | Set `VITE_API_URL=http://127.0.0.1:8002` |
 
 ## 🚀 Next Steps / Contributing
 

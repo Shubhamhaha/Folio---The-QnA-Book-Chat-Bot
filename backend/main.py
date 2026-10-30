@@ -64,6 +64,7 @@ async def root():
 
 
 @app.get("/health", tags=["Health"])
+@app.get("/api/health", tags=["Health"])
 async def health_check():
     """Check status of all services."""
     from app.utils.database import get_db

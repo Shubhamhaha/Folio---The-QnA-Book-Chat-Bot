@@ -74,7 +74,7 @@ export default function Layout() {
 
         <div className="px-4 py-3 border-t border-ink-800">
           <a
-            href="https://github.com"
+            href="https://github.com/Shubhamhaha/Folio---The-QnA-Book-Chat-Bot"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 text-ink-600 hover:text-ink-400 text-xs font-mono transition-colors"

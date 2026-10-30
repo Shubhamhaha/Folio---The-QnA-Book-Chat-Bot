@@ -2,7 +2,7 @@
 Pydantic models for request/response validation.
 """
 
-from pydantic import BaseModel, Field, HttpUrl
+from pydantic import BaseModel, Field, HttpUrl, field_validator
 from typing import Optional, List
 from datetime import datetime
 
@@ -29,6 +29,14 @@ class AIInsights(BaseModel):
     sentiment: Optional[str] = None
     sentiment_score: Optional[float] = None
     key_themes: Optional[List[str]] = []
+
+    @field_validator("sentiment", mode="before")
+    @classmethod
+    def normalize_sentiment(cls, value):
+        # Older imports stored sentiment as a structured object.
+        if isinstance(value, dict):
+            value = value.get("label", "Neutral")
+        return value
 
 
 class BookResponse(BookBase):

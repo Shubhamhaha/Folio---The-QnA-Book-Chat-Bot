@@ -170,11 +170,28 @@ def generate_book_insights(book: Dict) -> Dict:
         key_themes
     """
 
+    description = str(book.get("description") or "").strip()
+    if len(description) < 80:
+        title = book.get("title", "Unknown")
+        genre = book.get("genre") or "Unknown"
+        rating = book.get("rating")
+        rating_note = f" Catalog rating: {rating}/5." if rating is not None else ""
+        return {
+            "summary": (
+                f"No book description is available for {title}; "
+                f"only catalog metadata is stored. Genre: {genre}.{rating_note}"
+            ),
+            "genre_classification": genre,
+            "sentiment": "Neutral",
+            "sentiment_score": 0.0,
+            "key_themes": [],
+        }
+
     text_input = f"""
 Title: {book.get('title', 'Unknown')}
 Author: {book.get('author', 'Unknown')}
 Genre: {book.get('genre', 'Unknown')}
-Description: {book.get('description', 'No description available.')}
+Description: {description}
 Rating: {book.get('rating', 'N/A')} / 5
 """.strip()
 
@@ -288,6 +305,26 @@ def answer_question_with_context(
 
     Uses the five highest-ranked chunks supplied by the RAG service.
     """
+
+    question_lower = question.lower()
+    asks_for_plot = any(
+        phrase in question_lower
+        for phrase in ("about", "plot", "story", "summary", "summarize")
+    )
+    if (
+        asks_for_plot
+        and context_chunks
+        and not any(chunk.get("description_available", True) for chunk in context_chunks)
+    ):
+        titles = list(dict.fromkeys(
+            chunk.get("title", "this book") for chunk in context_chunks
+        ))
+        title_text = ", ".join(titles[:3])
+        return (
+            f"I found {title_text}, but the catalog does not contain a book "
+            "description or plot summary for it yet. I can’t describe the story "
+            "accurately from the title and catalog details alone."
+        )
 
     # Include the complete question and retrieved context in the
     # cache key to avoid returning answers for different contexts.

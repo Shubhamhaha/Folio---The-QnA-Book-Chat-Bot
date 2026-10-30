@@ -88,8 +88,8 @@ export default function ScrapeModal({ onClose }) {
           {/* Info box */}
           <div className="bg-ink-50 border border-ink-200 rounded-sm p-3">
             <p className="text-ink-600 text-xs leading-relaxed">
-              AI insights (summary, genre classification, sentiment) will be generated
-              for each book automatically. Embeddings are stored in background.
+              Book details are saved promptly and indexed for Q&amp;A in the background.
+              Answers use the available descriptions and catalog information.
             </p>
           </div>
         </div>

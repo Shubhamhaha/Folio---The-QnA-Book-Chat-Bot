@@ -50,7 +50,7 @@ export const fetchStats = () =>
 // ── Scrape ─────────────────────────────────────────────────────────────────
 
 export const triggerScrape = (payload) =>
-  api.post('/api/books/scrape', payload).then((r) => r.data)
+  api.post('/api/books/scrape', payload, { timeout: 180000 }).then((r) => r.data)
 
 // ── Q&A ───────────────────────────────────────────────────────────────────
 

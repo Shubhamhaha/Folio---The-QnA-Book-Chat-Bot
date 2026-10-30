@@ -3,42 +3,34 @@ __pycache__/
 *.pyc
 *.pyo
 venv/
-.env
 *.egg-info/
-dist/
-build/
 
-# ChromaDB
-backend/chroma_db/
-
-# Node
-node_modules/
-dist/
-.env.local
-
-# OS
-.DS_Store
-*.swp
-
-# Python virtual environments
+# Python virtual environments and caches
 .venv/
 backend/venv/
+.pytest_cache/
 
-# Environment variables
+# Environment variables and local secrets
 .env
 .env.*
 !.env.example
 backend/.env
 frontend/.env
 
-# Local vector database
+# ChromaDB and generated data
 backend/chroma_db/
 chroma_db/
+*.sqlite3
+*.db
 
-# Frontend dependencies and build output
+# Node and build output
+node_modules/
+dist/
+build/
 frontend/node_modules/
 frontend/dist/
 
-# Python cache
-__pycache__/
-*.py[cod]
+# OS and editor temporary files
+.DS_Store
+*.swp
+*.log
